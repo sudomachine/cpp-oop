@@ -4,6 +4,8 @@
 // for Student class
 //#include <ctime>
 
+// TASK 1
+
 class Person
 {
 private:
@@ -89,15 +91,110 @@ public:
   }
 };
 
+// for Student class
 unsigned int Student::studentsCounter = 0;
+
+// TASK 2
+
+class Fruit
+{
+protected:
+  const char* name;
+  const char* color;
+public:
+  Fruit()
+  {
+    name = "Banana";
+    color = "Yellow";
+  }
+  Fruit(const char* cName, const char* cColor):
+    name(cName), color(cColor)
+  {
+    // body of constructr
+  }
+  Fruit(const char* cColor):
+    color(cColor)
+  {
+    // body of constructr
+  }
+  ~Fruit()
+  {
+    // body of destructr
+  }
+  // setters
+  void setName(const char* name)
+  {
+    this->name = name;
+  }
+  void setColor(const char* color)
+  {
+    this->color = color;
+  }
+  // getters
+  const char* getName() const
+  {
+    return name;
+  }
+  const char* getColor() const
+  {
+    return color;
+  }
+};
+
+class Banana: public Fruit
+{
+public:
+  Banana(const char* cColor = "Yellow"):
+    Fruit(cColor)
+  {
+    name = "Banana";
+  }
+  ~Banana()
+  {
+    //body of destructr
+  }
+};
+
+class Apple: public Fruit
+{
+public:
+  Apple(const char* cColor = "Red"):
+    Fruit(cColor)
+  {
+    name = "Apple";
+  }
+  ~Apple()
+  {
+    // body of destructr
+  }
+};
+
+class GrannySmith: public Apple
+{
+public:
+  GrannySmith()
+  {
+    name = "Granny Smith apple";
+    color = "Green";
+  }
+  GrannySmith(const char* cColor):
+    Apple(cColor)
+  {
+    // body of cinstructr
+  }
+  ~GrannySmith()
+  {
+    // body of destructr
+  }
+};
 
 int main()
 {
-  Student s1("Anna", 18, 0, 45.4, 2022);
-  s1.print();
-  Student s2;
-  Student s3;
-  std::cout << s1.getStudentsCount() << std::endl;
-  std::cout << Student::getStudentsCount() << std::endl;
+  Apple a("Red");
+  Banana b;
+  GrannySmith gs;
+  std::cout << "My " << a.getName() << " is " << a.getColor() << std::endl \
+	    << "My " << b.getName() << " is " << b.getColor() << std::endl \
+	    << "My " << gs.getName() << " is " << gs.getColor() << std::endl;
   return 0;
 }
