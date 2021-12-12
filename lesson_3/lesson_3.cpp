@@ -307,7 +307,6 @@ public:
 
 int main()
 {
-  /*
   std::cout << "TASK 1" << std::endl;
   Circle c1(5);
   Parallelogram p1(4, 2, 1);
@@ -315,8 +314,7 @@ int main()
   Square sq1(9);
   Rhombus r(1,2,3);
   printArea(&sq1);
-  */
-  /*
+
   std::cout << "TASK 2" << std::endl;
   std::cout << "NEW OBJECT Car" << std::endl;
   Car car("Lada", "Priora");
@@ -329,9 +327,7 @@ int main()
   std::cout << std::endl;
   std::cout << "NEW OBJECT Minivan" << std::endl;
   Minivan minivan("Crysler", "Caravan");
-  */
-
-  /*
+  
   std::cout << "TASK 3" << std::endl;
   Fraction fr1(1, 2);
   Fraction fr2(2, 3);
@@ -363,8 +359,6 @@ int main()
   std::cout << "-2/3 * 7/6 = "; ((-fr2) * fr3).printFraction();
   //  (-(*a1)).printFraction(); // ok
   //  (-a1)->printFraction(); // not ok: wrong type argument
-                          // to unary minus
-			  */
-  
+                              // to unary minus
   return 0;
 }
