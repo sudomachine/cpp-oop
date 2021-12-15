@@ -1,6 +1,9 @@
 
 #include <iostream>
 #include <cassert>
+#include <vector>
+
+// TASK 1
 
 class Container
 {
@@ -16,14 +19,6 @@ public:
   {
     m_container = new int[SIZE];
   }
-  ~Container()
-  {
-    this->clear();
-  }
-  unsigned int getSize() const
-  {
-    return m_size;
-  }
   void clear()
   {
     if (m_size > 0)
@@ -33,29 +28,95 @@ public:
 	m_size = 0;
       }
   }
-  //  void resize(const unsigned int SIZE){}
-  void pushBack(const int ELEMENT)
+  ~Container()
   {
-    if (m_size == 0)
-      {
-	m_container = new int[m_size];
-      }
-    m_container[m_size++] = ELEMENT;
+    this->clear();
   }
-  void pushFront(const int ELEMENT)
+  unsigned int getSize() const
   {
-    if (m_size == 0)
+    return m_size;
+  }
+  void resize(const unsigned int SIZE)
+  {
+    if (SIZE == m_size)
       {
-	m_container = new int[m_size];
-	m_container[m_size++] = ELEMENT;
+	return; //void
+      }
+    else if (SIZE <= 0)
+      {
+	this->clear();
+	return; //void
       }
     else
       {
-	
+	unsigned int elementsToCopy = (SIZE < m_size) ? SIZE : m_size;
+	int *newContainer = new int[SIZE];
+	for (int i = 0; i < elementsToCopy; i++)
+	  {
+	    newContainer[i] = m_container[i];
+	  }
+	delete[] m_container;
+	m_container = newContainer;
+	m_size = SIZE;
+      }
+    
+  }
+  void pushBack(const int ELEMENT)
+  {
+    int *newContainer = new int[++m_size];
+    for (int i = 0; i < m_size-1; i++)
+      {
+	newContainer[i] = m_container[i];
+      }
+    newContainer[m_size-1] = ELEMENT;
+    delete[] m_container;
+    m_container = newContainer;
+  }
+  void pushFront(const int ELEMENT)
+  {
+    int *newContainer = new int[++m_size];
+    for (int i = m_size-1; i > 0; i--)
+      {
+	newContainer[i] = m_container[i-1];
+      }
+    newContainer[0] = ELEMENT;
+    delete[] m_container;
+    m_container = newContainer;
+  }
+  void popBack()
+  {
+    if (m_size == 1)
+      {
+	this->clear();
+      }
+    else if (m_size >= 2)
+      {
+	int *newContainer = new int[--m_size];
+	for (int i = 0; i < m_size; i++)
+	  {
+	    newContainer[i] = m_container[i];
+	  }
+	delete[] m_container;
+	m_container = newContainer;
       }
   }
-  //  void popBack(){}
-  //  void popFront(){}
+  void popFront()
+  {
+    if (m_size == 1)
+      {
+	this->clear();
+      }
+    else if (m_size >= 2)
+      {
+	int *newContainer = new int[--m_size];
+	for (int i = 0; i < m_size; i++)
+	  {
+	    newContainer[i] = m_container[i+1];
+	  }
+	delete[] m_container;
+	m_container = newContainer;
+      }
+  }
   void sort()
   {
     if (m_size > 1)
@@ -102,18 +163,77 @@ public:
   }
 };
 
+// TASK 2
+
+int countUniqueElements(std::vector<int> *vect)
+{
+  std::vector<int> filteredVect;
+  bool uniqueValue = true;
+  //1 empty vect
+  if (vect->size() == 0)
+    {
+      return 0;
+    }
+  //2 empty filtered vect
+  filteredVect.push_back((*vect)[0]);
+  //3 check other elements of vect
+  for (int i = 1; i < vect->size(); i++)
+    {
+      for (int j = 0; j < filteredVect.size(); j++)
+	{
+	  if ((*vect)[i] == filteredVect[j])
+	    {
+	      uniqueValue = false;
+	      break;
+	    }
+	}
+      if (uniqueValue)
+	{
+	  filteredVect.push_back((*vect)[i]);
+	}
+      else
+	{
+	  uniqueValue = true;
+	}
+    }
+  return filteredVect.size();
+}
+
 int main()
 {
+  srand(time(0));
+  
+  std::cout << "TASK 1" << std::endl;
   Container cnt;
-  cnt.print();
+  cnt.pushFront(100);
+  cnt.pushFront(1);
   cnt.pushBack(5);
+  cnt.pushBack(12);
   cnt.print();
-  cnt.clear();
-  cnt.clear();
+  cnt.sort();
   cnt.print();
-  cnt.pushBack(10);
   cnt.pushBack(1);
-  cnt.pushBack(5);
+  cnt.pushBack(-1);
+  cnt.pushBack(0);
   cnt.print();
+  cnt.sort();
+  cnt.print();
+  cnt.resize(4);
+  cnt.print();
+  cnt.resize(4);
+  cnt.print();
+
+  std::cout << "TASK 2" << std::endl;
+  std::vector<int> v;
+  std::vector<int> *p = &v;
+  std::cout << "VECT:" << std::endl;
+  for (int i = 0; i < 10; i++)
+    {
+      p->push_back(rand()%10);
+      std::cout << (*p)[i] << " ";
+    }
+  std::cout << std::endl;
+  std::cout << "VECT SIZE: " << p->size() << std::endl;
+  std::cout << "FILTERED VECT SIZE: " << countUniqueElements(p) << std::endl;
   return 0;
 }
