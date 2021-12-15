@@ -1,4 +1,6 @@
 
+#include <vector>
+
 enum Suit {CLUBS = 1, DIAMONDS, HEARTS, SPADES};
 enum Dignity {1 = 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 
@@ -26,6 +28,25 @@ public:
   {
     return card->m_dignity;
   }
+};
+
+class Hand
+{
+private:
+  std::vector<Card> **m_cards;
+public:
+  Hand()
+  {
+    // constr
+    
+  }
+  ~Hand()
+  {
+    //destr
+  }
+  void add(const Card *card){}
+  void clear(){}
+  int getValue(){return 0;}
 };
 
 int main()
