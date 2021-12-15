@@ -24,6 +24,7 @@ class Card
 private:
   Suit m_suit;
   Dignity m_dignity;
+  // true-visible, false-unvisible
   bool m_visibillity;
 public:
   Card(Suit suit, Dignity dignity, bool visibillity):
@@ -81,17 +82,23 @@ public:
   {
     Card *card;
     int score = 0;
+    // Ace quantity is necessary to recalculate score count if score is > 21,
+    // then Ace dignity is 1
     int qAce = 0;
     const short ALT_ACE = 1;
+    // hand is empty then score is 0
     if (m_hand->size() > 0)
       {
+	// count score for each card in the hand
         for (int i = 0; i < m_hand->size(); i++)
 	  {
 	    score += (m_hand->begin()+i)->getDignity();
 	  }
       }
+    // check score count
     if (score > 21)
       {
+	// count ace quantity
 	for (int i = 0; i < m_hand->size(); i++)
 	  {
 	    if ((m_hand->begin()+i)->getDignity() == ACE)
