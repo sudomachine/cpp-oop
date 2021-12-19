@@ -5,6 +5,7 @@ enum Suit {CLUBS = 1,
 	   DIAMONDS,
 	   HEARTS,
 	   SPADES};
+
 enum Dignity {TWO = 2,
 	      THREE,
 	      FOUR,
@@ -24,7 +25,7 @@ class Card
 private:
   Suit m_suit;
   Dignity m_dignity;
-  // true-visible, false-unvisible
+  // true-visible, false-invisible
   bool m_visibillity;
 public:
   Card(Suit suit, Dignity dignity, bool visibillity):
@@ -38,25 +39,32 @@ public:
   }
   void Flip()
   {
-    m_visibillity = (m_visibillity) ? false : true;
+    //m_visibillity = (m_visibillity) ? false : true; // my variant
+    m_visibillity = !(m_visibillity); // teacher variant
   }
   int getDignity() const
   {
-    return this->m_dignity;
+    int cardDignity = 0;
+    // dignity of invisible card get zero points
+    if (m_visibillity)
+      {
+	cardDignity = m_dignity;
+      }
+    return cardDignity;
   }
   void print()
   {
     std::cout << "CARD" << std::endl;
     std::cout << "m_suit: " << m_suit << std::endl;
     std::cout << "m_dignity: " << m_dignity << std::endl;
-    std::cout << "m_visibillity: " << ((m_visibillity) ? "Visible":"Unvisible") << std::endl;
+    std::cout << "m_visibillity: " << ((m_visibillity) ? "Visible":"Invisible") << std::endl;
   }
 };
 
 class Hand
 {
 private:
-  std::vector<Card> *m_hand;
+  std::vector<Card*> m_hand;
 public:
   Hand()
   {
