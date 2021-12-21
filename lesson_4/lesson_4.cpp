@@ -37,7 +37,7 @@ public:
   {
     return m_size;
   }
-  void resize(const int unsigned SIZE, int INDEX_OF_NEW_ELEMENT = -1)
+  void resize(const unsigned int SIZE, int INDEX_OF_NEW_ELEMENT = -1)
   {
     if (SIZE == m_size)
       {
