@@ -44,13 +44,15 @@ public:
   }
   int getDignity() const
   {
-    int cardDignity = 0;
     // dignity of invisible card get zero points
     if (m_visibillity)
       {
-	cardDignity = m_dignity;
+	return m_dignity;
       }
-    return cardDignity;
+    else
+      {
+	return 0;
+      }
   }
   void print()
   {
@@ -68,66 +70,68 @@ private:
 public:
   Hand()
   {
-    m_hand = new std::vector<Card>;
-  }
-  Hand(std::vector<Card> *hand): m_hand(hand)
-  {
-    // constr
+    m_hand.reserve(0);
   }
   ~Hand()
   {
-    delete[] m_hand;
+    this->clear();
   }
   void add(Card *card)
   {
-    m_hand->push_back(*card);
+    m_hand.push_back(card);
   }
   void clear()
   {
-    m_hand->clear();
+    // delete all cards in the hand by pointers
+    for (int i = 0; i < m_hand.size(); i++)
+      {
+	delete m_hand[i];
+      }
+    // delete card collection (hand)
+    m_hand.clear();
   }
   int getValue()
-  {
-    Card *card;
+  { 
     int score = 0;
-    // Ace quantity is necessary to recalculate score count if score is > 21,
+    // presence of an ace is necessary to recalculate score count if score is > 21,
     // then Ace dignity is 1
-    int qAce = 0;
+    int aceInHand = false;
     const short ALT_ACE = 1;
-    // hand is empty then score is 0
-    if (m_hand->size() > 0)
+    // if there are no cards in the hand then nothing to count 
+    if (m_hand.size() > 0)
       {
 	// count score for each card in the hand
-        for (int i = 0; i < m_hand->size(); i++)
+        for (int i = 0; i < m_hand.size(); i++)
 	  {
-	    score += (m_hand->begin()+i)->getDignity();
+	    score += m_hand[i]->getDignity();
 	  }
       }
-    // check score count
+    // check score count to recalculate the ace dignity
     if (score > 21)
       {
-	// count ace quantity
-	for (int i = 0; i < m_hand->size(); i++)
+	// swap ace dignity (only of one card) from 11 to 1
+	for (int i = 0; i < m_hand.size(); i++)
 	  {
-	    if ((m_hand->begin()+i)->getDignity() == ACE)
+	    if (m_hand[i]->getDignity() == ACE)
 	      {
-		qAce++;
+		aceInHand = true;
 	      }
 	  }
       }
-    return score - qAce*ACE + qAce*ALT_ACE;
+    return score - aceInHand*ACE + aceInHand*ALT_ACE;
   }
 };
 
 int main()
 {   
-  Hand *hand = new Hand();
-  std::cout << hand->getValue() << std::endl;
-  hand->add(new Card(DIAMONDS, ACE, true));
-  hand->add(new Card(DIAMONDS, THREE, true));
-  hand->add(new Card(DIAMONDS, FIVE, true));
-  hand->add(new Card(DIAMONDS, TWO, true));
-  std::cout << hand->getValue() << std::endl;
+  Hand hand;
+  std::cout << hand.getValue() << std::endl;
+  hand.add(new Card(DIAMONDS, ACE, false));
+  hand.add(new Card(DIAMONDS, THREE, false));
+  hand.add(new Card(DIAMONDS, FIVE, false));
+  hand.add(new Card(DIAMONDS, TWO, false));
+  hand.add(new Card(DIAMONDS, ACE, false));
+  std::cout << hand.getValue() << std::endl;
   return 0;
 }
 
