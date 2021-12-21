@@ -20,7 +20,7 @@ public:
   {
     // body of constr
   }
-  float area()
+  float area() override
   {
     return PI * (m_radius * m_radius);
   }
@@ -37,7 +37,7 @@ public:
   {
     // body of constr
   }
-  float area()
+  float area() override
   {
     return m_a * m_h;
   }
@@ -50,7 +50,7 @@ public:
   {
     // constr
   }
-  float area()
+  float area() override
   {
     return m_a * m_b;
   }
@@ -63,7 +63,7 @@ public:
   {
     // constr
   }
-  float area()
+  float area() override
   {
     return m_a * m_a;
   }
