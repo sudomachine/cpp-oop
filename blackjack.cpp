@@ -115,6 +115,7 @@ public:
 	    if (m_hand[i]->getDignity() == ACE)
 	      {
 		aceInHand = true;
+		break;
 	      }
 	  }
       }
