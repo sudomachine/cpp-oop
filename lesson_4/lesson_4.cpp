@@ -11,9 +11,10 @@ private:
   int *m_container;
   unsigned int m_size;
 public:
-  Container(): m_size(0), m_container(nullptr)
+  Container()
   {
-    // constr
+    m_size = 0;
+    m_container = new int[m_size];
   }
   Container(const unsigned int SIZE): m_size(SIZE)
   {
@@ -31,12 +32,12 @@ public:
   ~Container()
   {
     this->clear();
-  }
+   }
   unsigned int getSize() const
   {
     return m_size;
   }
-  void resize(const unsigned int SIZE)
+  void resize(const int unsigned SIZE, int INDEX_OF_NEW_ELEMENT = -1)
   {
     if (SIZE == m_size)
       {
@@ -45,61 +46,50 @@ public:
     else if (SIZE <= 0)
       {
 	this->clear();
-	return; //void
       }
     else
       {
-	unsigned int elementsToCopy = (SIZE < m_size) ? SIZE : m_size;
 	int *newContainer = new int[SIZE];
-	for (int i = 0; i < elementsToCopy; i++)
+	// detect: push front or back of container
+	// [startIndex=0, SIZE-1) OR [startIndex=1, SIZE)
+	unsigned int startIndex;
+	unsigned int endIndex;
+	if (INDEX_OF_NEW_ELEMENT == -1)
 	  {
-	    newContainer[i] = m_container[i];
+	    startIndex = 0;
+	    endIndex = (SIZE < m_size) ? SIZE : m_size;
+	  }
+	else
+	  {
+	    startIndex = (INDEX_OF_NEW_ELEMENT == 0) ? 1 : 0;
+	    endIndex = (startIndex == 0) ? (SIZE-1) : SIZE;
+	  }
+	for (int i = startIndex; i < endIndex; i++)
+	  {
+	    newContainer[i] = m_container[i-startIndex];
 	  }
 	delete[] m_container;
 	m_container = newContainer;
 	m_size = SIZE;
       }
-    
   }
   void pushBack(const int ELEMENT)
   {
-    int *newContainer = new int[++m_size];
-    for (int i = 0; i < m_size-1; i++)
-      {
-	newContainer[i] = m_container[i];
-      }
-    newContainer[m_size-1] = ELEMENT;
-    delete[] m_container;
-    m_container = newContainer;
+    const unsigned int INDEX_OF_NEW_ELEMENT = m_size; // last
+    this->resize(m_size + 1, INDEX_OF_NEW_ELEMENT);
+    m_container[INDEX_OF_NEW_ELEMENT] = ELEMENT;
   }
   void pushFront(const int ELEMENT)
   {
-    int *newContainer = new int[++m_size];
-    for (int i = m_size-1; i > 0; i--)
-      {
-	newContainer[i] = m_container[i-1];
-      }
-    newContainer[0] = ELEMENT;
-    delete[] m_container;
-    m_container = newContainer;
+    const unsigned int INDEX_OF_NEW_ELEMENT = 0; // first
+    this->resize(m_size + 1, INDEX_OF_NEW_ELEMENT);
+    m_container[INDEX_OF_NEW_ELEMENT] = ELEMENT;
   }
   void popBack()
   {
-    if (m_size == 1)
-      {
-	this->clear();
-      }
-    else if (m_size >= 2)
-      {
-	int *newContainer = new int[--m_size];
-	for (int i = 0; i < m_size; i++)
-	  {
-	    newContainer[i] = m_container[i];
-	  }
-	delete[] m_container;
-	m_container = newContainer;
-      }
+    this->resize(m_size - 1);
   }
+  /*
   void popFront()
   {
     if (m_size == 1)
@@ -116,7 +106,7 @@ public:
 	delete[] m_container;
 	m_container = newContainer;
       }
-  }
+      }*/
   void sort()
   {
     if (m_size > 1)
@@ -205,9 +195,9 @@ int main()
   
   std::cout << "TASK 1" << std::endl;
   Container cnt;
-  cnt.pushFront(100);
-  cnt.pushFront(1);
-  cnt.pushBack(5);
+  cnt.pushFront(100);  cnt.print();
+  cnt.pushFront(1);  cnt.print();
+  cnt.pushBack(5);  cnt.print();
   cnt.pushBack(12);
   cnt.print();
   cnt.sort();
@@ -216,11 +206,13 @@ int main()
   cnt.pushBack(-1);
   cnt.pushBack(0);
   cnt.print();
-  cnt.sort();
-  cnt.print();
-  cnt.resize(4);
-  cnt.print();
-  cnt.resize(4);
+  cnt.popBack();
+  cnt.popBack();
+  cnt.popBack();
+  cnt.popBack();
+  cnt.popBack();
+  cnt.popBack();
+  cnt.popBack();
   cnt.print();
 
   std::cout << "TASK 2" << std::endl;
