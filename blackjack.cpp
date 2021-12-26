@@ -65,14 +65,14 @@ public:
 
 class Hand
 {
-private:
+protected:
   std::vector<Card*> m_hand;
 public:
   Hand()
   {
     m_hand.reserve(0);
   }
-  ~Hand()
+  virtual ~Hand()
   {
     this->clear();
   }
@@ -123,16 +123,54 @@ public:
   }
 };
 
+class GenericPlayer: public Hand
+{
+protected:
+  const char* m_name;
+public:
+  GenericPlayer(const char* name): m_name(name) {}
+  virtual ~GenericPlayer() {}
+  virtual bool isHitting(bool hit = true)
+  {
+    if (hit)
+      {
+	return true;
+      }
+    else
+      {
+	return false;
+      }
+  }
+  bool isBoosted()
+  {
+    int playerTotal = this->getValue();
+    int maxTotal = 21;
+    if (playerTotal > maxTotal)
+      {
+	this->bust();
+	return true;
+      }
+    else
+      {
+	return false;
+      }
+  }
+  void bust()
+  {
+    std::cout << this->m_name << " is busted!" << std::endl;
+    std::cout << "Points: " << this->getValue() << std::endl;
+  }  
+};
+
 int main()
 {   
-  Hand hand;
-  std::cout << hand.getValue() << std::endl;
-  hand.add(new Card(DIAMONDS, ACE, false));
-  hand.add(new Card(DIAMONDS, THREE, false));
-  hand.add(new Card(DIAMONDS, FIVE, false));
-  hand.add(new Card(DIAMONDS, TWO, false));
-  hand.add(new Card(DIAMONDS, ACE, false));
-  std::cout << hand.getValue() << std::endl;
+  GenericPlayer gp("Sudakov");
+  gp.add(new Card(DIAMONDS, ACE, true));
+  gp.add(new Card(DIAMONDS, THREE, true));
+  gp.add(new Card(DIAMONDS, FIVE, true));
+  gp.add(new Card(DIAMONDS, TWO, true));
+  gp.add(new Card(DIAMONDS, ACE, true));
+  gp.isBoosted();
   return 0;
 }
 
