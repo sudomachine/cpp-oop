@@ -65,7 +65,7 @@ public:
 
 class Hand
 {
-private:
+protected:
   std::vector<Card*> m_hand;
 public:
   Hand()
@@ -121,6 +121,18 @@ public:
       }
     return score - aceInHand*ACE + aceInHand*ALT_ACE;
   }
+};
+
+class GenericPlayer: public Hand
+{
+protected:
+  const char* name;
+public:
+  GenericPlayer() {}
+  ~GenericPlayer() {}
+  bool isHitting();
+  bool isBoosted();
+  void bust();
 };
 
 int main()
